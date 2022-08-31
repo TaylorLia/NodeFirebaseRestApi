@@ -3,7 +3,7 @@
 
 // definindo imports
 const firebase = require('../db');
-const Trainer = require('../models/trainer')
+const Trainer = require('../models/trainers')
 const firestore = firebase.firestore()
 
 // criando o metodo para adicionar um novo treinador
@@ -35,7 +35,7 @@ const getAllTrainers = async(req,res,next) => {
         if (data.empty){
             res.status[404].send('Não há treinadores cadastrados!')
         }else{
-            data.forEach.doc => {
+            data.forEach(doc => {
                 const trainer = new Trainer(
                     doc.id,
                     doc.data().name,
@@ -49,11 +49,71 @@ const getAllTrainers = async(req,res,next) => {
                     doc.data().state,
                 )
                 trainersArray.push(trainer)
-            }
+            })
             res.status[200].send(trainersArray)
         }
-    }
-    catch(error) {}
+    }catch(error) {}
+    
 }
 
 // criando um metodo para listar um trainador especifico
+const getTrainer = async (req,res,next) => {
+    try{
+        // criando um objeto para receber o parametro id da requisição
+        const id = req.params.id
+        //criando um objeto para receber a consulta
+        const trainers = await firestore.collection('trainers').doc(id)
+        // criando um objeto para receber o documento
+        const data = await trainer.get()
+        // testando se existe o documento
+        if(data.exists){
+            res.status(404).send('Não foi possivel encontrar o treinador com o ID indicado')
+        }else{
+            res.status(200).send(data.data())
+        }
+        
+
+    }catch(error){
+        res.status(400).send(error.mensage)
+    }
+}
+
+// Criando um metodo para atualizar um treinador especifico
+const updateTrainer = async (req,res,next) =>{
+    try{
+        // criando um objeto para receber o parametro id da requisição
+        const id = req.params.id
+        // criando um objeto para receber o corpo
+        const data = req.body
+        //criando um objeto para receber a consulta
+        const trainers = await firestore.collection('trainers').doc(id)
+        //realizando a atualização
+        await trainer.update(data)
+        res.status(200).send('Treinador atualizdo com sucesso!')
+
+    }catch(error){
+        res.status(400).send(error.mensage)
+    }
+}
+
+// criando um metodo para excluir um treinador especifico
+const deleteTrainer = async (req,res,next) => {
+    try{
+        // criando um objeto para receber um parametro id da requisição
+        const id = res.params.id
+        // realizando a exclusão do documento
+        await firestore.collection('trainers').doc(id).delete()
+        res.status(200).send('Trainador excluido com sucesso!')
+
+    }catch(error){
+        res.status(400).send(error.mensage)
+    }
+}
+
+module.exports = {
+    addTrainer,
+    getAllTrainers,
+    getTrainer,
+    updateTrainer,
+    deleteTrainer
+}

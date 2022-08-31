@@ -5,6 +5,7 @@
 const express = require('express')
 const cors = require('cors')
 const config = require('./config')
+const trainerRoutes = require('./routes/trainerRoutes')
 
 // inicializando o express
 const app = express();
@@ -16,6 +17,9 @@ app.use(express.json())
 // Definindo a utilização do CORS
 // (Frontend)
 app.use(cors())
+
+//utilizando as rotas para treinadores
+app.use('/api',trainerRoutes.routes)
 
 // Definindo a porta onde o servidor estará ouvindo
 app.listen(config.port, () =>{
