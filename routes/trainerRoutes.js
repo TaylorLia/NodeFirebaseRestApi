@@ -15,7 +15,7 @@ const router = express.Router()
 // definindo a rota para a listagem de trainadores
 router.get('/trainers',getAllTrainers)
 
-router.get('/trainers',getTrainer)
+router.get('/trainers/:id',getTrainer)
 
 //definindo ua nova rota para cadastro de treinadores
 router.post('/trainers',addTrainer)
