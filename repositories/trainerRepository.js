@@ -3,7 +3,7 @@
 // Definindo imports
 const firebase = require('../db')
 const firestore = firebase.firestore()
-const Trainer = require('../models/trainers')
+const trainer = require('../models/trainers')
 
 class trainerRepository {
     constructor () {}
