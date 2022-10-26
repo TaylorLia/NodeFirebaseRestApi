@@ -1,22 +1,28 @@
-// definindo o strict mode
-'use strict'
-
 // realizando as importações
 const express = require('express')
-const controler = require('../controllers/pokemonController')
+const {
+  addPokemon,
+  getAllPokemon,
+  getPokemon,
+  updatePokemon,
+  deletePokemon
+} = require('../controllers/pokemonController')
 
 // inicializando as rotas do express
 const router = express.Router()
 
-// iniciando um novo objeto da classe pokemonController
-let _ctrl = new controler()
+// criando as rotas para o recurso 'pokemon'
+// definindo a rota para a listagem de pokemon
+router.get('/pokemon', getAllPokemon)
+// definindo a rota para listar pokemon específico
+router.get('/pokemon/:id', getPokemon)
+// definindo a rota para cadastro de pokemon
+router.post('/pokemon', addPokemon)
+// definindo a rota para alterar um pokemon
+router.put('/pokemon/:id', updatePokemon)
+// definindo a rota para excluir um pokemon
+router.delete('/pokemon/:id', deletePokemon)
 
-// definindo as rotas
-router.get('/', _ctrl.get)
-router.get('id', _ctrl.getById)
-router.post('/', _ctrl.post)
-router.put('/:id', _ctrl.put)
-router.delete('/:id', _ctrl.delete)
-
-// exportando o modulo
-module.exports = router
+module.exports = {
+  routes: router
+}

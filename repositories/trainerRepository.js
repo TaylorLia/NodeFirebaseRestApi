@@ -1,41 +1,34 @@
-'use strict'
-
-// Definindo imports
-const firebase = require('../db')
-const firestore = firebase.firestore()
-const trainer = require('../models/trainers')
+const repBase = require('../bin/base/repository-base')
 
 class trainerRepository {
-    constructor () {}
+  constructor() {
+    this._repBase = new repBase('trainer', 'trainers')
+  }
 
-    //o create será responsavel por receber do controler o req.body com os dados e fazer a chamada com o firestore para a persistencia dos dados
-    async create(data) {
-        let res = await firestore.collection('trainers').doc().set(data);
-        return res
-    }
+  async create(data) {
+    return await this._repBase.create(data)
+  }
 
-    async update(id,data) {
-        let trainer = await firestore.collection('trainers').doc(id)
-        let res = await trainer.update(data)
-        return res
-    }
+  async update(id, data) {
+    return await this._repBase.update(id, {
+      name: data.name,
+      age: data.age,
+      city: data.city,
+      state: data.state
+    })
+  }
 
-    async getAll() {
-        let trainers = await firestore.collection('trainers')
-        let res = await trainers.get()
-        return res
-    }
+  async getAll() {
+    return await this._repBase.getAll()
+  }
 
-    async getById(id) {
-        let trainer = await firestore.collection('trainers').doc(id)
-        let res = await trainer.get()
-        return res
-        // return await trainer.get()
-    }
+  async getById(id) {
+    return await this._repBase.getById(id)
+  }
 
-    async delete(id) {
-        return await firestore.collection('trainers').doc(id).delete()
-    }
+  async delete(id) {
+    return await this._repBase.delete(id)
+  }
 }
 
 module.exports = trainerRepository
